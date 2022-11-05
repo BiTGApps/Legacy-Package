@@ -1,0 +1,90 @@
+name: BiTGApps Build
+
+on:
+  workflow_dispatch:
+
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  RELEASE: v1.5
+
+jobs:
+  build:
+    if: github.repository_owner == 'BiTGApps'
+    runs-on: ubuntu-latest
+
+    steps:
+       - name: Initial Setup
+         uses: actions/checkout@v3
+
+       - name: Create BiTGApps
+         run: |
+           rm -rf BiTGApps
+           mkdir BiTGApps
+           install -d out
+
+       - name: Clone Build Sources
+         run: |
+           git clone https://github.com/BiTGApps/Legacy-Package BiTGApps
+
+       - name: Create Sources
+         run: |
+           mkdir BiTGApps/sources
+
+       - name: Install Git LFS
+         run: |
+           wget https://github.com/git-lfs/git-lfs/releases/download/v3.2.0/git-lfs-linux-amd64-v3.2.0.tar.gz
+           tar -xz -f git-lfs-linux-amd64-v3.2.0.tar.gz && cd git-lfs-3.2.0 && sudo ./install.sh && cd ..
+
+       - name: Clone Package Sources
+         run: |
+           git clone https://github.com/BiTGApps/Legacy-Sources BiTGApps/sources/Legacy-Sources
+           cd BiTGApps/sources/Legacy-Sources && git lfs install --local && git lfs pull && cd ../..
+
+       - name: Initialize Package Sources
+         run: |
+           cp -rf BiTGApps/sources/Legacy-Sources/Gearhead BiTGApps/Gearhead
+
+       - name: Remove Package Sources
+         run: |
+           rm -rf BiTGApps/sources
+
+       - name: Download ZIP Signing Tool
+         run: |
+           wget https://github.com/BiTGApps/BiTGApps/raw/master/tools/zipsigner/zipsigner.jar
+
+       - name: Build Gearhead Package
+         run: |
+           cd BiTGApps/Gearhead
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Gearhead-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Gearhead/Gearhead-$RELEASE.zip out
+
+       - name: Sign Gearhead Package
+         run: |
+           sudo java -jar zipsigner.jar out/Gearhead-$RELEASE.zip out/Gearhead-$RELEASE-Signed.zip
+           rm -rf out/Gearhead-$RELEASE.zip && mv -f out/Gearhead-$RELEASE-Signed.zip out/Gearhead-$RELEASE.zip
+           mv -f out/Gearhead-$RELEASE.zip out/AndroidAuto-$RELEASE.zip
+
+       - name: Github Release CLI
+         run: |
+           npm install -g github-release-cli
+
+       - name: Release Signed Package
+         env:
+           PACKAGE: false
+         run: |
+           github-release upload \
+           --owner "BiTGApps" \
+           --repo "Legacy-Package" \
+           --token "$TOKEN" \
+           --tag "${RELEASE}" \
+           --release-name "BiTGApps ${RELEASE}" \
+           "out/AndroidAuto-$RELEASE.zip"
+
+       - name: Upload Build Artifact
+         if: ${{ env.PACKAGE == 'true' }}
+         uses: actions/upload-artifact@v3
+         with:
+           name: BiTGApps-Build
+           path: |
+             out/AndroidAuto-$RELEASE.zip
