@@ -43,6 +43,7 @@ jobs:
        - name: Initialize Package Sources
          run: |
            cp -rf BiTGApps/sources/Legacy-Sources/Gearhead BiTGApps/Gearhead
+           cp -rf BiTGApps/sources/addon-sources/Velvet BiTGApps/Velvet
 
        - name: Remove Package Sources
          run: |
@@ -65,6 +66,19 @@ jobs:
            rm -rf out/Gearhead-$RELEASE.zip && mv -f out/Gearhead-$RELEASE-Signed.zip out/Gearhead-$RELEASE.zip
            mv -f out/Gearhead-$RELEASE.zip out/AndroidAuto-$RELEASE.zip
 
+       - name: Build Velvet Package
+         run: |
+           cd BiTGApps/Velvet
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Velvet-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Velvet/Velvet-$RELEASE.zip out
+
+       - name: Sign Velvet Package
+         run: |
+           sudo java -jar zipsigner.jar out/Velvet-$RELEASE.zip out/Velvet-$RELEASE-Signed.zip
+           rm -rf out/Velvet-$RELEASE.zip && mv -f out/Velvet-$RELEASE-Signed.zip out/Velvet-$RELEASE.zip
+           mv -f out/Velvet-$RELEASE.zip out/Assistant-$RELEASE.zip
+
        - name: Github Release CLI
          run: |
            npm install -g github-release-cli
@@ -79,6 +93,7 @@ jobs:
            --token "$TOKEN" \
            --tag "${RELEASE}" \
            --release-name "BiTGApps ${RELEASE}" \
+           "out/Assistant-$RELEASE.zip" \
            "out/AndroidAuto-$RELEASE.zip"
 
        - name: Upload Build Artifact
@@ -87,4 +102,5 @@ jobs:
          with:
            name: BiTGApps-Build
            path: |
+             out/Assistant-$RELEASE.zip
              out/AndroidAuto-$RELEASE.zip
