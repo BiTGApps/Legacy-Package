@@ -42,7 +42,14 @@ jobs:
 
        - name: Initialize Package Sources
          run: |
+           cp -rf BiTGApps/sources/Legacy-Sources/Dialer BiTGApps/Dialer
            cp -rf BiTGApps/sources/Legacy-Sources/Gearhead BiTGApps/Gearhead
+           cp -rf BiTGApps/sources/Legacy-Sources/Gmail BiTGApps/Gmail
+           cp -rf BiTGApps/sources/Legacy-Sources/Keyboard BiTGApps/Keyboard
+           cp -rf BiTGApps/sources/Legacy-Sources/Maps BiTGApps/Maps
+           cp -rf BiTGApps/sources/Legacy-Sources/Messaging BiTGApps/Messaging
+           cp -rf BiTGApps/sources/Legacy-Sources/Photos BiTGApps/Photos
+           cp -rf BiTGApps/sources/Legacy-Sources/Speech BiTGApps/Speech
            cp -rf BiTGApps/sources/Legacy-Sources/Velvet BiTGApps/Velvet
 
        - name: Remove Package Sources
@@ -52,6 +59,18 @@ jobs:
        - name: Download ZIP Signing Tool
          run: |
            wget https://github.com/BiTGApps/BiTGApps/raw/master/tools/zipsigner/zipsigner.jar
+
+       - name: Build Dialer Package
+         run: |
+           cd BiTGApps/Dialer
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Dialer-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Dialer/Dialer-$RELEASE.zip out
+
+       - name: Sign Dialer Package
+         run: |
+           sudo java -jar zipsigner.jar out/Dialer-$RELEASE.zip out/Dialer-$RELEASE-Signed.zip
+           rm -rf out/Dialer-$RELEASE.zip && mv -f out/Dialer-$RELEASE-Signed.zip out/Dialer-$RELEASE.zip
 
        - name: Build Gearhead Package
          run: |
@@ -65,6 +84,80 @@ jobs:
            sudo java -jar zipsigner.jar out/Gearhead-$RELEASE.zip out/Gearhead-$RELEASE-Signed.zip
            rm -rf out/Gearhead-$RELEASE.zip && mv -f out/Gearhead-$RELEASE-Signed.zip out/Gearhead-$RELEASE.zip
            mv -f out/Gearhead-$RELEASE.zip out/AndroidAuto-$RELEASE.zip
+
+       - name: Build Gmail Package
+         run: |
+           cd BiTGApps/Gmail
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Gmail-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Gmail/Gmail-$RELEASE.zip out
+
+       - name: Sign Gmail Package
+         run: |
+           sudo java -jar zipsigner.jar out/Gmail-$RELEASE.zip out/Gmail-$RELEASE-Signed.zip
+           rm -rf out/Gmail-$RELEASE.zip && mv -f out/Gmail-$RELEASE-Signed.zip out/Gmail-$RELEASE.zip
+
+       - name: Build Keyboard Package
+         run: |
+           cd BiTGApps/Keyboard
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Keyboard-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Keyboard/Keyboard-$RELEASE.zip out
+
+       - name: Sign Keyboard Package
+         run: |
+           sudo java -jar zipsigner.jar out/Keyboard-$RELEASE.zip out/Keyboard-$RELEASE-Signed.zip
+           rm -rf out/Keyboard-$RELEASE.zip && mv -f out/Keyboard-$RELEASE-Signed.zip out/Keyboard-$RELEASE.zip
+           mv -f out/Keyboard-$RELEASE.zip out/LatinIME-$RELEASE.zip
+
+       - name: Build Maps Package
+         run: |
+           cd BiTGApps/Maps
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Maps-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Maps/Maps-$RELEASE.zip out
+
+       - name: Sign Maps Package
+         run: |
+           sudo java -jar zipsigner.jar out/Maps-$RELEASE.zip out/Maps-$RELEASE-Signed.zip
+           rm -rf out/Maps-$RELEASE.zip && mv -f out/Maps-$RELEASE-Signed.zip out/Maps-$RELEASE.zip
+
+       - name: Build Messaging Package
+         run: |
+           cd BiTGApps/Messaging
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Messaging-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Messaging/Messaging-$RELEASE.zip out
+
+       - name: Sign Messaging Package
+         run: |
+           sudo java -jar zipsigner.jar out/Messaging-$RELEASE.zip out/Messaging-$RELEASE-Signed.zip
+           rm -rf out/Messaging-$RELEASE.zip && mv -f out/Messaging-$RELEASE-Signed.zip out/Messaging-$RELEASE.zip
+
+       - name: Build Photos Package
+         run: |
+           cd BiTGApps/Photos
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Photos-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Photos/Photos-$RELEASE.zip out
+
+       - name: Sign Photos Package
+         run: |
+           sudo java -jar zipsigner.jar out/Photos-$RELEASE.zip out/Photos-$RELEASE-Signed.zip
+           rm -rf out/Photos-$RELEASE.zip && mv -f out/Photos-$RELEASE-Signed.zip out/Photos-$RELEASE.zip
+
+       - name: Build Speech Package
+         run: |
+           cd BiTGApps/Speech
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Speech-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Speech/Speech-$RELEASE.zip out
+
+       - name: Sign Speech Package
+         run: |
+           sudo java -jar zipsigner.jar out/Speech-$RELEASE.zip out/Speech-$RELEASE-Signed.zip
+           rm -rf out/Speech-$RELEASE.zip && mv -f out/Speech-$RELEASE-Signed.zip out/Speech-$RELEASE.zip
+           mv -f out/Speech-$RELEASE.zip out/GoogleTTS-$RELEASE.zip
 
        - name: Build Velvet Package
          run: |
@@ -94,7 +187,14 @@ jobs:
            --tag "${RELEASE}" \
            --release-name "BiTGApps ${RELEASE}" \
            "out/Assistant-$RELEASE.zip" \
-           "out/AndroidAuto-$RELEASE.zip"
+           "out/AndroidAuto-$RELEASE.zip" \
+           "out/Dialer-$RELEASE.zip" \
+           "out/Gmail-$RELEASE.zip" \
+           "out/GoogleTTS-$RELEASE.zip" \
+           "out/LatinIME-$RELEASE.zip" \
+           "out/Maps-$RELEASE.zip" \
+           "out/Messaging-$RELEASE.zip" \
+           "out/Photos-$RELEASE.zip"
 
        - name: Upload Build Artifact
          if: ${{ env.PACKAGE == 'true' }}
@@ -104,3 +204,10 @@ jobs:
            path: |
              out/Assistant-$RELEASE.zip
              out/AndroidAuto-$RELEASE.zip
+             out/Dialer-$RELEASE.zip
+             out/Gmail-$RELEASE.zip
+             out/GoogleTTS-$RELEASE.zip
+             out/LatinIME-$RELEASE.zip
+             out/Maps-$RELEASE.zip
+             out/Messaging-$RELEASE.zip
+             out/Photos-$RELEASE.zip
