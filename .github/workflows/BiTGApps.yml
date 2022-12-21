@@ -47,6 +47,7 @@ jobs:
            cp -rf BiTGApps/sources/Legacy-Sources/Gmail BiTGApps/Gmail
            cp -rf BiTGApps/sources/Legacy-Sources/Keyboard BiTGApps/Keyboard
            cp -rf BiTGApps/sources/Legacy-Sources/Maps BiTGApps/Maps
+           cp -rf BiTGApps/sources/Legacy-sources/Markup BiTGApps/Markup
            cp -rf BiTGApps/sources/Legacy-Sources/Messaging BiTGApps/Messaging
            cp -rf BiTGApps/sources/Legacy-Sources/Photos BiTGApps/Photos
            cp -rf BiTGApps/sources/Legacy-Sources/Speech BiTGApps/Speech
@@ -122,6 +123,18 @@ jobs:
            sudo java -jar zipsigner.jar out/Maps-$RELEASE.zip out/Maps-$RELEASE-Signed.zip
            rm -rf out/Maps-$RELEASE.zip && mv -f out/Maps-$RELEASE-Signed.zip out/Maps-$RELEASE.zip
 
+       - name: Build Markup Package
+         run: |
+           cd BiTGApps/Markup
+           . envsetup.sh && rm -rf envsetup.sh
+           zip -qr9 Markup-$RELEASE.zip * && cd ../..
+           cp -f BiTGApps/Markup/Markup-$RELEASE.zip out
+
+       - name: Sign Markup Package
+         run: |
+           sudo java -jar zipsigner.jar out/Markup-$RELEASE.zip out/Markup-$RELEASE-Signed.zip
+           rm -rf out/Markup-$RELEASE.zip && mv -f out/Markup-$RELEASE-Signed.zip out/Markup-$RELEASE.zip
+
        - name: Build Messaging Package
          run: |
            cd BiTGApps/Messaging
@@ -193,6 +206,7 @@ jobs:
            "out/GoogleTTS-$RELEASE.zip" \
            "out/LatinIME-$RELEASE.zip" \
            "out/Maps-$RELEASE.zip" \
+           "out/Markup-$RELEASE.zip" \
            "out/Messaging-$RELEASE.zip" \
            "out/Photos-$RELEASE.zip"
 
@@ -209,5 +223,6 @@ jobs:
              out/GoogleTTS-$RELEASE.zip
              out/LatinIME-$RELEASE.zip
              out/Maps-$RELEASE.zip
+             out/Markup-$RELEASE.zip
              out/Messaging-$RELEASE.zip
              out/Photos-$RELEASE.zip
