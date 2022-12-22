@@ -450,8 +450,13 @@ is_uninstaller() {
 }
 
 sdk_v25_install() {
+  # Dedicated V3 Partitions
+  P="/product /system_ext"
   # Remove Photos Google
-  rm -rf $SYSTEM_APP/Photos
+  for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
+    find $f -type d -name '*Gallery*' -exec rm -rf {} +
+    find $f -type d -name '*Photos*' -exec rm -rf {} +
+  done
   ui_print "- Installing Photos Google"
   ZIP="zip/sys/Photos.tar.xz"
   if [ "$BOOTMODE" = "false" ]; then
