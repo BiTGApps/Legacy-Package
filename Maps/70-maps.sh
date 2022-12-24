@@ -17,14 +17,26 @@ fi
 list_files() {
 cat <<EOF
 app/Maps/Maps.apk
-app/Maps/split_config.armeabi_v7a.apk
-app/Maps/split_config.en.apk
-app/Maps/split_config.xhdpi.apk
 app/Maps/lib/arm/libarcore_sdk_c.so
 app/Maps/lib/arm/libarcore_sdk_jni.so
 app/Maps/lib/arm/libgmm-jni.so
 app/Maps/lib/arm/libmappedcountercacheversionjni.so
 app/Maps/lib/arm/libnative_crash_handler_jni.so
+app/Maps/lib/arm64/libarcore_sdk_c.so
+app/Maps/lib/arm64/libarcore_sdk_jni.so
+app/Maps/lib/arm64/libgmm-jni.so
+app/Maps/lib/arm64/libmappedcountercacheversionjni.so
+app/Maps/lib/arm64/libnative_crash_handler_jni.so
+app/Maps/lib/x86/libarcore_sdk_c.so
+app/Maps/lib/x86/libarcore_sdk_jni.so
+app/Maps/lib/x86/libgmm-jni.so
+app/Maps/lib/x86/libmappedcountercacheversionjni.so
+app/Maps/lib/x86/libnative_crash_handler_jni.so
+app/Maps/lib/x86_64/libarcore_sdk_c.so
+app/Maps/lib/x86_64/libarcore_sdk_jni.so
+app/Maps/lib/x86_64/libgmm-jni.so
+app/Maps/lib/x86_64/libmappedcountercacheversionjni.so
+app/Maps/lib/x86_64/libnative_crash_handler_jni.so
 app/GLH/GLH.apk
 EOF
 }

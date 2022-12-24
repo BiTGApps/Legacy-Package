@@ -20,9 +20,6 @@ P="/product /system_ext /postinstall/product /postinstall/system_ext"
 list_files() {
 cat <<EOF
 priv-app/Messaging/Messaging.apk
-priv-app/Messaging/split_config.armeabi_v7a.apk
-priv-app/Messaging/split_config.en.apk
-priv-app/Messaging/split_config.xhdpi.apk
 priv-app/Services/Services.apk
 etc/permissions/services.xml
 EOF

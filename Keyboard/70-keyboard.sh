@@ -20,8 +20,8 @@ P="/product /system_ext /postinstall/product /postinstall/system_ext"
 list_files() {
 cat <<EOF
 app/Keyboard/Keyboard.apk
-app/Keyboard/split_config.xhdpi.apk
-app/Keyboard/split_tenoranimation_feature_split.apk
+app/Keyboard/lib/arm/libjni_latinimegoogle.so
+app/Keyboard/lib/arm64/libjni_latinimegoogle.so
 EOF
 }
 

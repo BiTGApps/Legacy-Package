@@ -20,9 +20,7 @@ P="/product /system_ext /postinstall/product /postinstall/system_ext"
 list_files() {
 cat <<EOF
 app/Photos/Photos.apk
-app/Photos/split_config.en.apk
-app/Photos/split_config.xhdpi.apk
-app/Photos/lib/arm/libcronet.107.0.5284.2.so
+app/Photos/lib/arm/libcronet.102.0.4973.2.so
 app/Photos/lib/arm/libfilterframework_jni.so
 app/Photos/lib/arm/libflacJNI.so
 app/Photos/lib/arm/libframesequence.so

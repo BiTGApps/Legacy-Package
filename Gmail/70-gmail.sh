@@ -17,9 +17,6 @@ fi
 list_files() {
 cat <<EOF
 app/Gmail/Gmail.apk
-app/Gmail/split_config.armeabi_v7a.apk
-app/Gmail/split_config.en.apk
-app/Gmail/split_config.xhdpi.apk
 EOF
 }
 
