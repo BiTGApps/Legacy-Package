@@ -4,7 +4,7 @@
 version="v1.6"
 
 # Define Installation Size
-CAPACITY="47000"
+CAPACITY="105000"
 
 print_title() {
   local LEN ONE TWO BAR
