@@ -1,5 +1,8 @@
 # This file is part of The BiTGApps Project
 
+# Google Markup minimum API Level
+minAPILevel="29"
+
 # List of GApps Packages
 BITGAPPS="zip/sys/Markup.tar.xz"
 
@@ -391,6 +394,31 @@ on_installed() {
   exit "$?"
 }
 
+get_file_prop() { grep -m1 "^$2=" "$1" | cut -d= -f2; }
+
+get_prop() {
+  for f in "$SYSTEM/build.prop"; do
+    if [ -e "$f" ]; then
+      prop="$(get_file_prop "$f" "$1")"
+      if [ -n "$prop" ]; then
+        break
+      fi
+    fi
+  done
+  if [ -z "$prop" ]; then
+    getprop "$1" | cut -c1-
+  else
+    printf "$prop"
+  fi
+}
+
+check_sdk() {
+  android_sdk="$(get_prop "ro.build.version.sdk")"
+  if [ "$android_sdk" -lt "$minAPILevel" ]; then
+    on_abort "! Please install Android 10+"
+  fi
+}
+
 mk_component() {
   for d in \
     $UNZIP_DIR/tmp_sys \
@@ -487,6 +515,7 @@ pre_install() {
   super_partition
   mount_all
   mount_apex
+  check_sdk
 }
 
 df_reclaimed() {
